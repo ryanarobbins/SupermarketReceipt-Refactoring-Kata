@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 
 namespace SupermarketReceipt.Test
@@ -33,6 +35,33 @@ namespace SupermarketReceipt.Test
             Assert.Equal(1.99, receiptItem.Price);
             Assert.Equal(2.5 * 1.99, receiptItem.TotalPrice);
             Assert.Equal(2.5, receiptItem.Quantity);
+        }
+
+        [Fact]
+        public Task TenPercentDiscountVerify()
+        {
+            // ARRANGE
+            SupermarketCatalog catalog = new FakeCatalog();
+            var toothbrush = new Product("toothbrush", ProductUnit.Each);
+            catalog.AddProduct(toothbrush, 0.99);
+            var apples = new Product("apples", ProductUnit.Kilo);
+            catalog.AddProduct(apples, 1.99);
+
+            var cart = new ShoppingCart();
+            cart.AddItemQuantity(apples, 2.5);
+
+            var teller = new Teller(catalog);
+            teller.AddSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 10.0);
+
+            // ACT
+            var receipt = teller.ChecksOutArticlesFrom(cart);
+
+            // ASSERT
+            var receiptPrinter = new ReceiptPrinter();
+
+            var receiptAsString = receiptPrinter.PrintReceipt(receipt);
+
+            return Verifier.Verify(receiptAsString);
         }
     }
 }
