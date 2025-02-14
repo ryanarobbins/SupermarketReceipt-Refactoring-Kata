@@ -14,13 +14,7 @@ namespace SupermarketReceipt
         {
             return new List<ProductQuantity>(_items);
         }
-
-        public void AddItem(Product product)
-        {
-            AddItemQuantity(product, 1.0);
-        }
-
-
+        
         public void AddItemQuantity(Product product, double quantity)
         {
             _items.Add(new ProductQuantity(product, quantity));

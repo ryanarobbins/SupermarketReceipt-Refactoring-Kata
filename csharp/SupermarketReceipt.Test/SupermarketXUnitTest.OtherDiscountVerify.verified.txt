@@ -1,0 +1,14 @@
+﻿pears                               6.96
+  1.99 * 3.500
+chips ahoy                         14.95
+  2.99 * 5
+sunglasses                         26.97
+  8.99 * 3
+cat food                           14.85
+  4.95 * 3
+chips ahoy                          2.99
+5 for 12.00(chips ahoy)            -2.95
+3 for 2(sunglasses)                -8.99
+2 for 6.00(cat food)               -3.90
+
+Total:                             50.88

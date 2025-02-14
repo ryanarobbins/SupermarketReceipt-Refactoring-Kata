@@ -1,0 +1,3 @@
+- [ ] per piece items can be charged for decimal amounts
+- [ ] what is that parameter on offer that is a number?
+- 
