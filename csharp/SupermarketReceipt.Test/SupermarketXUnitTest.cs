@@ -34,7 +34,7 @@ namespace SupermarketReceipt.Test
 
             return Verifier.Verify(receiptAsString);
         }
-        
+
         [Fact]
         public Task OtherDiscountVerify()
         {
@@ -70,6 +70,37 @@ namespace SupermarketReceipt.Test
             var receiptAsString = receiptPrinter.PrintReceipt(receipt);
 
             return Verifier.Verify(receiptAsString);
+        }
+
+        [Fact]
+        public void OtherDiscountVerifyNewDiscount()
+        {
+
+            // ARRANGE
+            SupermarketCatalog catalog = new FakeCatalog();
+            var chipsAhoy = new Product("chips ahoy", ProductUnit.Each);
+            catalog.AddProduct(chipsAhoy, 2.99);
+
+            var cart = new ShoppingCart();
+            cart.AddItemQuantity(chipsAhoy, 2);
+
+            var teller = new Teller(catalog);
+            teller.AddSpecialOffer(SpecialOfferType.BuyOneGetOne, chipsAhoy, 42);
+
+
+            // ACT
+            var receipt = teller.ChecksOutArticlesFrom(cart);
+
+            // ASSERT
+
+            Assert.Equal(4.975, receipt.GetTotalPrice());
+            Assert.Equal(new List<Discount>(), receipt.GetDiscounts());
+            Assert.Single(receipt.GetItems());
+            var receiptItem = receipt.GetItems()[0];
+            Assert.Equal(chipsAhoy, receiptItem.Product);
+            Assert.Equal(1.99, receiptItem.Price);
+            Assert.Equal(2.5 * 1.99, receiptItem.TotalPrice);
+            Assert.Equal(2.5, receiptItem.Quantity);
         }
     }
 }

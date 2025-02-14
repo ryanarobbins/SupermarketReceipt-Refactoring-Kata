@@ -5,7 +5,8 @@ namespace SupermarketReceipt
         ThreeForTwo,
         TenPercentDiscount,
         TwoForAmount,
-        FiveForAmount
+        FiveForAmount,
+        BuyOneGetOne
     }
 
     public class Offer
