@@ -71,6 +71,11 @@ namespace SupermarketReceipt
                         discount = new Discount(p, x + " for " + PrintPrice(offer.Argument), -discountTotal);
                     }
 
+                    if (offer.OfferType == SpecialOfferType.BuyOneGetOne)
+                    {
+                        discount = new Discount(p, "Buy one get one free", -quantity * unitPrice * 0.5);
+                    }
+
                     if (discount != null)
                         receipt.AddDiscount(discount);
                 }

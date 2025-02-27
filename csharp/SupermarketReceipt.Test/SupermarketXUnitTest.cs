@@ -73,9 +73,8 @@ namespace SupermarketReceipt.Test
         }
 
         [Fact]
-        public void OtherDiscountVerifyNewDiscount()
+        public Task OtherDiscountVerifyNewDiscount()
         {
-
             // ARRANGE
             SupermarketCatalog catalog = new FakeCatalog();
             var chipsAhoy = new Product("chips ahoy", ProductUnit.Each);
@@ -92,15 +91,11 @@ namespace SupermarketReceipt.Test
             var receipt = teller.ChecksOutArticlesFrom(cart);
 
             // ASSERT
+            var receiptPrinter = new ReceiptPrinter();
 
-            Assert.Equal(4.975, receipt.GetTotalPrice());
-            Assert.Equal(new List<Discount>(), receipt.GetDiscounts());
-            Assert.Single(receipt.GetItems());
-            var receiptItem = receipt.GetItems()[0];
-            Assert.Equal(chipsAhoy, receiptItem.Product);
-            Assert.Equal(1.99, receiptItem.Price);
-            Assert.Equal(2.5 * 1.99, receiptItem.TotalPrice);
-            Assert.Equal(2.5, receiptItem.Quantity);
+            var receiptAsString = receiptPrinter.PrintReceipt(receipt);
+
+            return Verifier.Verify(receiptAsString);
         }
     }
 }

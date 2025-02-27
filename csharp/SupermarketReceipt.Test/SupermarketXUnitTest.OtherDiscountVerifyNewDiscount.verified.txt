@@ -1,0 +1,5 @@
+﻿chips ahoy                          5.98
+  2.99 * 2
+Buy one get one free(chips ahoy)   -2.99
+
+Total:                              2.99
