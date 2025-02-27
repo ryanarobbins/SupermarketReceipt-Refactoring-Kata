@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
@@ -97,5 +96,41 @@ namespace SupermarketReceipt.Test
 
             return Verifier.Verify(receiptAsString);
         }
+        [Fact]
+        public Task OfferNotValidForCart()
+        {
+            // ARRANGE
+            SupermarketCatalog catalog = new FakeCatalog();
+            var chipsAhoy = new Product("chips ahoy", ProductUnit.Each);
+            catalog.AddProduct(chipsAhoy, 2.99);
+            var sunglasses = new Product("sunglasses", ProductUnit.Each);
+            catalog.AddProduct(sunglasses, 8.99);
+            var catFood = new Product("cat food", ProductUnit.Each);
+            catalog.AddProduct(catFood, 4.95);
+            var pears = new Product("pears", ProductUnit.Kilo);
+            catalog.AddProduct(pears, 1.99);
+
+            var cart = new ShoppingCart();
+            cart.AddItemQuantity(pears, 3.5);
+            cart.AddItemQuantity(chipsAhoy, 3);
+            cart.AddItemQuantity(sunglasses, 2);
+            cart.AddItemQuantity(catFood, 1);
+
+            var teller = new Teller(catalog);
+            teller.AddSpecialOffer(SpecialOfferType.FiveForAmount, chipsAhoy, 12.0);
+            teller.AddSpecialOffer(SpecialOfferType.ThreeForTwo, sunglasses, 999);
+            teller.AddSpecialOffer(SpecialOfferType.TwoForAmount, catFood, 6.0);
+
+            // ACT
+            var receipt = teller.ChecksOutArticlesFrom(cart);
+
+            // ASSERT
+            var receiptPrinter = new ReceiptPrinter();
+
+            var receiptAsString = receiptPrinter.PrintReceipt(receipt);
+
+            return Verifier.Verify(receiptAsString);
+        }
+
     }
 }
